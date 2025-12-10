@@ -1,0 +1,907 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Risk Control System API",
+        "description": "API documentation for Risk Control System",
+        "contact": {
+            "email": "admin@riskcontrol.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://my-default-host.com",
+            "description": "Demo API Server"
+        }
+    ],
+    "paths": {
+        "/api/v1/accounts": {
+            "get": {
+                "tags": [
+                    "Accounts"
+                ],
+                "summary": "List all accounts",
+                "description": "Returns list of accounts",
+                "operationId": "getAccountsList",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Accounts"
+                ],
+                "summary": "Create new account",
+                "description": "Returns account data",
+                "operationId": "storeAccount",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreAccountRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "422": {
+                        "description": "Validation Error"
+                    }
+                }
+            }
+        },
+        "/api/v1/accounts/{id}": {
+            "get": {
+                "tags": [
+                    "Accounts"
+                ],
+                "summary": "Get account information",
+                "description": "Returns account data with risk status",
+                "operationId": "getAccountById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Account ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/v1/accounts/{id}/restore": {
+            "post": {
+                "tags": [
+                    "Accounts"
+                ],
+                "summary": "Restore disabled account",
+                "description": "Re-enables a disabled account",
+                "operationId": "restoreAccount",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Account ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/v1/incidents": {
+            "get": {
+                "tags": [
+                    "Incidents"
+                ],
+                "summary": "Get list of incidents",
+                "description": "Returns list of incidents with optional filtering",
+                "operationId": "getIncidentsList",
+                "parameters": [
+                    {
+                        "name": "account_id",
+                        "in": "query",
+                        "description": "Filter by Account ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "risk_rule_id",
+                        "in": "query",
+                        "description": "Filter by Risk Rule ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/api/v1/incidents/{id}": {
+            "get": {
+                "tags": [
+                    "Incidents"
+                ],
+                "summary": "Get incident information",
+                "description": "Returns incident data",
+                "operationId": "getIncidentById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Incident ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/v1/incidents/account/{accountId}/stats": {
+            "get": {
+                "tags": [
+                    "Incidents"
+                ],
+                "summary": "Get incident statistics for an account",
+                "description": "Returns incident counts and breakdown by rule",
+                "operationId": "getAccountIncidentStats",
+                "parameters": [
+                    {
+                        "name": "accountId",
+                        "in": "path",
+                        "description": "Account ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/v1/incidents/notifications/unread": {
+            "get": {
+                "tags": [
+                    "Notifications"
+                ],
+                "summary": "Get unread incidents",
+                "description": "Returns list of unread incidents",
+                "operationId": "getUnreadNotifications",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    }
+                }
+            }
+        },
+        "/api/v1/incidents/{id}/read": {
+            "put": {
+                "tags": [
+                    "Notifications"
+                ],
+                "summary": "Mark incident as read",
+                "description": "Updates read_at timestamp",
+                "operationId": "markNotificationAsRead",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Incident ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/v1/incidents/notifications/read-all": {
+            "put": {
+                "tags": [
+                    "Notifications"
+                ],
+                "summary": "Mark all incidents as read",
+                "description": "Updates read_at timestamp for all unread incidents",
+                "operationId": "markAllNotificationsAsRead",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    }
+                }
+            }
+        },
+        "/api/v1/risk-rules": {
+            "get": {
+                "tags": [
+                    "Risk Rules"
+                ],
+                "summary": "Get list of risk rules",
+                "description": "Returns list of risk rules",
+                "operationId": "getRiskRulesList",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Risk Rules"
+                ],
+                "summary": "Store new risk rule",
+                "description": "Returns risk rule data",
+                "operationId": "storeRiskRule",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreRiskRuleRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "422": {
+                        "description": "Validation Error"
+                    }
+                }
+            }
+        },
+        "/api/v1/risk-rules/{id}": {
+            "get": {
+                "tags": [
+                    "Risk Rules"
+                ],
+                "summary": "Get risk rule information",
+                "description": "Returns risk rule data",
+                "operationId": "getRiskRuleById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Risk Rule ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Risk Rules"
+                ],
+                "summary": "Update existing risk rule",
+                "description": "Returns updated risk rule data",
+                "operationId": "updateRiskRule",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Risk Rule ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateRiskRuleRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "422": {
+                        "description": "Validation Error"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Risk Rules"
+                ],
+                "summary": "Delete existing risk rule",
+                "description": "Deletes a record and returns no content",
+                "operationId": "deleteRiskRule",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Risk Rule ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/v1/risk-rules/{id}/actions": {
+            "post": {
+                "tags": [
+                    "Risk Rules"
+                ],
+                "summary": "Attach actions to risk rule",
+                "description": "Returns risk rule data with attached actions",
+                "operationId": "attachActionsToRiskRule",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Risk Rule ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AttachActionsRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "422": {
+                        "description": "Validation Error"
+                    }
+                }
+            }
+        },
+        "/api/v1/risk-rules/actions": {
+            "get": {
+                "tags": [
+                    "Risk Rules"
+                ],
+                "summary": "Get list of available actions",
+                "description": "Returns list of configured actions",
+                "operationId": "getAvailableActions",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/api/v1/trades": {
+            "get": {
+                "tags": [
+                    "Trades"
+                ],
+                "summary": "Get list of trades",
+                "description": "Returns list of trades with optional filtering",
+                "operationId": "getTradesList",
+                "parameters": [
+                    {
+                        "name": "account_id",
+                        "in": "query",
+                        "description": "Filter by Account ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Filter by Status (OPEN/CLOSED)",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Trades"
+                ],
+                "summary": "Store new trade",
+                "description": "Returns trade data",
+                "operationId": "storeTrade",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreTradeRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "422": {
+                        "description": "Validation Error"
+                    }
+                }
+            }
+        },
+        "/api/v1/trades/{id}": {
+            "get": {
+                "tags": [
+                    "Trades"
+                ],
+                "summary": "Get trade information",
+                "description": "Returns trade data",
+                "operationId": "getTradeById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Trade ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Trades"
+                ],
+                "summary": "Update existing trade",
+                "description": "Returns updated trade data",
+                "operationId": "updateTrade",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Trade ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateTradeRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "422": {
+                        "description": "Validation Error"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "AttachActionsRequest": {
+                "title": "Attach Actions Request",
+                "description": "Attach Actions request body data",
+                "required": [
+                    "action_ids"
+                ],
+                "properties": {
+                    "action_ids": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "example": [
+                            1,
+                            2
+                        ]
+                    }
+                },
+                "type": "object"
+            },
+            "StoreAccountRequest": {
+                "title": "Store Account Request",
+                "description": "Store Account request body data",
+                "required": [
+                    "login"
+                ],
+                "properties": {
+                    "login": {
+                        "type": "integer",
+                        "example": 123456
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "enable",
+                            "disable"
+                        ],
+                        "example": "enable"
+                    },
+                    "trading_status": {
+                        "type": "string",
+                        "enum": [
+                            "enable",
+                            "disable"
+                        ],
+                        "example": "enable"
+                    }
+                },
+                "type": "object"
+            },
+            "StoreRiskRuleRequest": {
+                "title": "Store Risk Rule Request",
+                "description": "Store Risk Rule request body data",
+                "required": [
+                    "name",
+                    "rule_type",
+                    "severity",
+                    "incident_limit"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Max Daily Loss"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Limits daily loss to $500"
+                    },
+                    "rule_type": {
+                        "type": "string",
+                        "enum": [
+                            "min_duration",
+                            "volume_consistency",
+                            "trade_frequency"
+                        ],
+                        "example": "min_duration"
+                    },
+                    "severity": {
+                        "type": "string",
+                        "enum": [
+                            "HARD",
+                            "SOFT"
+                        ],
+                        "example": "HARD"
+                    },
+                    "incident_limit": {
+                        "type": "integer",
+                        "example": 3
+                    },
+                    "is_active": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "parameters": {
+                        "type": "object",
+                        "example": {
+                            "min_duration_seconds": 60
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "StoreTradeRequest": {
+                "title": "Store Trade Request",
+                "description": "Store Trade request body data",
+                "required": [
+                    "account_id",
+                    "type",
+                    "volume",
+                    "open_time",
+                    "open_price",
+                    "status"
+                ],
+                "properties": {
+                    "account_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "type": {
+                        "type": "string",
+                        "enum": [
+                            "BUY",
+                            "SELL"
+                        ],
+                        "example": "BUY"
+                    },
+                    "volume": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 1.5
+                    },
+                    "open_time": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2023-10-27T10:00:00Z"
+                    },
+                    "close_time": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2023-10-27T12:00:00Z",
+                        "nullable": true
+                    },
+                    "open_price": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 150
+                    },
+                    "close_price": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 155,
+                        "nullable": true
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "OPEN",
+                            "CLOSED"
+                        ],
+                        "example": "OPEN"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateRiskRuleRequest": {
+                "title": "Update Risk Rule Request",
+                "description": "Update Risk Rule request body data",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Max Daily Loss Updated"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Updated description"
+                    },
+                    "severity": {
+                        "type": "string",
+                        "enum": [
+                            "HARD",
+                            "SOFT"
+                        ],
+                        "example": "SOFT"
+                    },
+                    "incident_limit": {
+                        "type": "integer",
+                        "example": 5
+                    },
+                    "is_active": {
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "parameters": {
+                        "type": "object",
+                        "example": {
+                            "min_duration_seconds": 120
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateTradeRequest": {
+                "title": "Update Trade Request",
+                "description": "Update Trade request body data",
+                "properties": {
+                    "close_time": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2023-10-27T12:00:00Z"
+                    },
+                    "close_price": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 155
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "OPEN",
+                            "CLOSED"
+                        ],
+                        "example": "CLOSED"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Accounts",
+            "description": "Accounts"
+        },
+        {
+            "name": "Incidents",
+            "description": "Incidents"
+        },
+        {
+            "name": "Notifications",
+            "description": "Notifications"
+        },
+        {
+            "name": "Risk Rules",
+            "description": "Risk Rules"
+        },
+        {
+            "name": "Trades",
+            "description": "Trades"
+        }
+    ]
+}
