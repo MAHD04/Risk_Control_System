@@ -7,22 +7,7 @@ The **Risk Control System** is a high-performance, real-time monitoring solution
 
 The system follows a modern **Microservices-ready** architecture, separating the frontend user interface from the backend logic. This design ensures scalability, maintainability, and flexibility.
 
-```mermaid
-graph TD
-    User[User / Admin] -->|HTTPS| Frontend[Frontend (Next.js)]
-    Frontend -->|REST API| Backend[Backend (Laravel)]
-    Backend -->|Read/Write| DB[(MySQL Database)]
-    
-    subgraph "Risk Evaluation Engine"
-        TradeEvent[Trade Saved Event] -->|Trigger| Listener[EvaluateRiskListener]
-        Listener -->|Call| Service[RiskEvaluationService]
-        Service -->|Fetch| Rules[Active Risk Rules]
-        Service -->|Evaluate| Trade[Trade Data]
-        Service -->|Result| Incident[Create Incident if Violated]
-    end
-    
-    Backend -.->|Async Event| TradeEvent
-```
+
 
 ### Why this Architecture?
 1.  **Separation of Concerns**: The **Next.js** frontend handles the presentation layer and user interaction, while the **Laravel** backend focuses on business logic, data validation, and risk evaluation. This allows frontend and backend teams to work independently.
