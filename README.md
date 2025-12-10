@@ -1,7 +1,7 @@
 # Risk Control System
 
 ## Overview
-The Risk Control System is a robust, real-time monitoring solution designed to evaluate trading activity against a set of configurable risk rules. It automatically detects anomalies, generates incidents, and can trigger protective actions (such as disabling trading or sending notifications) to mitigate financial risk.
+The **Risk Control System** is a high-performance, real-time monitoring solution designed to evaluate trading activity against a set of configurable risk rules. It automatically detects anomalies, generates incidents, and triggers protective actions (such as disabling trading or sending notifications) to mitigate financial risk instantly.
 
 ## Architecture
 
@@ -76,20 +76,13 @@ Instead of waiting for a periodic cron job to run every few minutes, the system 
 
 ## Installation & Execution
 
-### Manual Installation
+### Prerequisites
+*   **PHP 8.2+**
+*   **Composer**
+*   **Node.js & npm**
+*   **MySQL Server**
 
-Follow these steps to run the application directly on your machine.
-
-
-
-
-#### Prerequisites
-*   PHP 8.2+
-*   Composer
-*   Node.js & npm
-*   MySQL Server
-
-#### Backend Setup
+### 1. Backend Setup (Laravel)
 1.  Navigate to the backend directory:
     ```bash
     cd backend
@@ -103,7 +96,7 @@ Follow these steps to run the application directly on your machine.
     cp .env.example .env
     php artisan key:generate
     ```
-    *   Edit `.env` and set your database credentials (`DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`).
+    *   Open `.env` and set your database credentials (`DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`).
 4.  Run Migrations & Seeds:
     ```bash
     php artisan migrate --seed
@@ -114,7 +107,7 @@ Follow these steps to run the application directly on your machine.
     ```
     The API will be available at http://127.0.0.1:8000.
 
-#### Frontend Setup
+### 2. Frontend Setup (Next.js)
 1.  Navigate to the frontend directory:
     ```bash
     cd frontend
@@ -128,3 +121,21 @@ Follow these steps to run the application directly on your machine.
     npm run dev
     ```
     The application will be available at http://localhost:3000.
+
+---
+
+## Documentation & Structure
+
+### API Documentation
+The backend provides a full **OpenAPI / Swagger** documentation.
+Once the server is running, you can access the interactive API docs at:
+*   **URL**: `http://127.0.0.1:8000/api/documentation`
+
+### Key Backend Directories
+To help you navigate the codebase, here are the most important directories in `backend/app`:
+
+*   **`Events/`**: Contains the `TradeSaved` event, which triggers the risk evaluation.
+*   **`Listeners/`**: Contains `EvaluateRiskListener`, which handles the event and calls the service.
+*   **`Rules/`**: Contains the logic for each risk rule (Strategy Pattern). New rules are added here.
+*   **`Services/`**: Contains `RiskEvaluationService`, the core engine that orchestrates the checks.
+*   **`Contracts/`**: Interfaces like `RuleStrategy` that ensure all rules follow the same structure.
